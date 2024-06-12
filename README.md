@@ -12,7 +12,18 @@ Este tutorial irá guiá-lo na configuração e uso de um ambiente Docker Compos
 Aqui está o arquivo `docker-compose.yml` que será utilizado:
 
 ```yaml
+version: '3.7'
 services:
+  milvus:
+    image: milvusdb/milvus:latest
+    container_name: milvus
+    ports:
+      - "19530:19530"
+    volumes:
+      - milvus-data:/var/lib/milvus
+    environment:
+      - TZ=America/Sao_Paulo
+
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
@@ -52,8 +63,10 @@ services:
     tty: true
     depends_on:
       - ollama
+      - milvus
 
 volumes:
+  milvus-data:
   ollama:
   webui-volume:
 ```
